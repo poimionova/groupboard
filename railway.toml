@@ -1,12 +1,3 @@
-[build]
-builder = "DOCKERFILE"
-
-[[services]]
-name = "backend"
-source = "backend"
-dockerfile = "backend/Dockerfile"
-
-[[services]]
-name = "frontend"
-source = "frontend"
-dockerfile = "frontend/Dockerfile"
+# Railway monorepo: configure each service via Railway dashboard
+# Set "Root Directory" = "backend" or "frontend" for each service
+# Each subdirectory has its own railway.toml
