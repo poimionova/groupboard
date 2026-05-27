@@ -45,8 +45,10 @@ app.include_router(polls_router, prefix="/api")
 app.include_router(stats_router, prefix="/api")
 
 
-os.makedirs("/app/uploads", exist_ok=True)
-app.mount("/uploads", StaticFiles(directory="/app/uploads"), name="uploads")
+from app.core.config import settings
+UPLOAD_DIR = settings.UPLOAD_DIR
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 
 @app.get("/")
