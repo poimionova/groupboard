@@ -9,8 +9,9 @@ from app.db.session import get_db
 from app.models.user import User, Homework, HomeworkAssignment
 from app.schemas.schemas import HomeworkCreate, HomeworkOut
 from app.core.security import get_current_user
+from app.core.config import settings
 
-UPLOAD_DIR = "/app/uploads"
+UPLOAD_DIR = settings.UPLOAD_DIR
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 router = APIRouter(prefix="/homework", tags=["homework"])
