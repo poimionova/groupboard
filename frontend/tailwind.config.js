@@ -1,0 +1,67 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ['"Syne"', 'sans-serif'],
+        body: ['"DM Sans"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+      colors: {
+        brand: {
+          50: '#f0f4ff',
+          100: '#e0eaff',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
+          900: '#1e1b4b',
+        },
+        surface: {
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          600: '#52525b',
+          700: '#3f3f46',
+          800: '#27272a',
+          900: '#18181b',
+          950: '#09090b',
+        }
+      },
+      animation: {
+        'slide-up': 'slideUp 0.3s ease-out',
+        'slide-down': 'slideDown 0.25s ease-out',
+        'fade-in': 'fadeIn 0.2s ease-out',
+        'fade-in-up': 'fadeInUp 0.4s ease-out both',
+        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'bounce-in': 'bounceIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both',
+        'float': 'float 4s ease-in-out infinite',
+        'wiggle': 'wiggle 0.5s ease-in-out',
+        'shimmer': 'shimmer 1.8s linear infinite',
+        'gradient-x': 'gradientX 4s ease infinite',
+        'spin-slow': 'spin 10s linear infinite',
+        'glow-pulse': 'glowPulse 2.5s ease-in-out infinite',
+        'pop': 'pop 0.3s cubic-bezier(0.34,1.56,0.64,1) both',
+        'typewriter': 'typewriter 1.2s steps(20) both',
+      },
+      keyframes: {
+        slideUp: { from: { opacity: '0', transform: 'translateY(14px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        slideDown: { from: { opacity: '0', transform: 'translateY(-10px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        fadeIn: { from: { opacity: '0' }, to: { opacity: '1' } },
+        fadeInUp: { from: { opacity: '0', transform: 'translateY(22px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        pulseSoft: { '0%,100%': { opacity: '1' }, '50%': { opacity: '.65' } },
+        bounceIn: { '0%': { opacity: '0', transform: 'scale(0.75)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+        float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } },
+        wiggle: { '0%,100%': { transform: 'rotate(0deg)' }, '20%': { transform: 'rotate(-8deg)' }, '60%': { transform: 'rotate(8deg)' } },
+        shimmer: { '0%': { backgroundPosition: '-400% 0' }, '100%': { backgroundPosition: '400% 0' } },
+        gradientX: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
+        glowPulse: { '0%,100%': { boxShadow: '0 0 10px rgba(99,102,241,0.3)' }, '50%': { boxShadow: '0 0 25px rgba(99,102,241,0.6), 0 0 50px rgba(99,102,241,0.2)' } },
+        pop: { '0%': { opacity: '0', transform: 'scale(0.8)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+        typewriter: { from: { width: '0' }, to: { width: '100%' } },
+      },
+    },
+  },
+  plugins: [],
+}
