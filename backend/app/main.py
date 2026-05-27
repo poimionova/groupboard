@@ -3,13 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 import os
+from app.core.config import settings
 from app.db.session import engine, Base
 from app.api.routes.auth import router as auth_router
 from app.api.routes.groups import router as groups_router
 from app.api.routes.homework import router as hw_router
 from app.api.routes.queues import router as queues_router
 from app.api.routes.other import schedule_router, tasks_router, polls_router, stats_router
-# import models so metadata is populated
 import app.models.user  # noqa
 
 
@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="GroupBoard API",
     version="0.1.0",
-    description="Kanban-доска для учебной группы",
+    description="Канбан-доска для учебной группы",
     lifespan=lifespan,
 )
 
@@ -44,8 +44,6 @@ app.include_router(tasks_router, prefix="/api")
 app.include_router(polls_router, prefix="/api")
 app.include_router(stats_router, prefix="/api")
 
-
-from app.core.config import settings
 UPLOAD_DIR = settings.UPLOAD_DIR
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
