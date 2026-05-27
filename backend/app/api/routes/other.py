@@ -7,7 +7,6 @@ from app.schemas.schemas import (
     ScheduleCreate, ScheduleOut,
     TaskCreate, TaskUpdate, TaskOut,
     PollCreate, PollOut, PollOptionOut, VoteCreate,
-    DashboardStats, HomeworkOut, UserOut
 )
 from app.core.security import get_current_user
 from datetime import datetime, timezone
@@ -226,7 +225,7 @@ async def dashboard(current_user: User = Depends(get_current_user), db: AsyncSes
         done_r = await db.execute(
             select(func.count(HomeworkAssignment.id))
             .join(Homework, HomeworkAssignment.homework_id == Homework.id)
-            .where(Homework.group_id == gid, HomeworkAssignment.completed == True)
+            .where(Homework.group_id == gid, HomeworkAssignment.completed.is_(True))
         )
         hw_rate = round(done_r.scalar() / total_possible * 100, 1)
     else:

@@ -3,11 +3,10 @@ from datetime import datetime, timezone
 from typing import Optional, List
 from sqlalchemy import (
     String, Text, Boolean, Integer, SmallInteger,
-    DateTime, Date, Time, ForeignKey, Enum as SAEnum,
+    DateTime, ForeignKey, Enum as SAEnum,
     UniqueConstraint, JSON
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID
 from app.db.session import Base
 
 def now_utc():

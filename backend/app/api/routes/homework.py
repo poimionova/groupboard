@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from datetime import datetime, timezone
-import os, uuid, aiofiles
+import os
+import uuid
+import aiofiles
 from app.db.session import get_db
 from app.models.user import User, Homework, HomeworkAssignment
 from app.schemas.schemas import HomeworkCreate, HomeworkOut
@@ -57,7 +59,7 @@ async def list_homework(
     for hw in hws:
         cc = await db.execute(
             select(func.count(HomeworkAssignment.id))
-            .where(HomeworkAssignment.homework_id == hw.id, HomeworkAssignment.completed == True)
+            .where(HomeworkAssignment.homework_id == hw.id, HomeworkAssignment.completed.is_(True))
         )
         my_a = await db.execute(
             select(HomeworkAssignment).where(
