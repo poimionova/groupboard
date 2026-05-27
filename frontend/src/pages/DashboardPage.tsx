@@ -1,32 +1,32 @@
 import { useQuery } from '@tanstack/react-query'
-import { TrendingUp, Users, BookOpen, CheckSquare, Clock, Trophy, Copy, Zap } from 'lucide-react'
+import { TrendingUp, Users, BookOpen, CheckSquare, Clock, Trophy, Copy, Zap, RefreshCw } from 'lucide-react'
 import api from '../lib/api'
 import { useAuthStore } from '../store/authStore'
 import toast from 'react-hot-toast'
-import { format, parseISO } from 'date-fns'
-import { ru } from 'date-fns/locale'
+import { parseISO } from 'date-fns'
+import { useState } from 'react'
 
-const MEMES = [
-  { emoji: '🚀', text: 'Дедлайн завтра в 23:59', sub: 'начну в 23:00, норм успею' },
-  { emoji: '💀', text: 'Пары с 9 утра', sub: 'кто вообще это придумал' },
-  { emoji: '😅', text: '«Сделаю домашку за вечер»', sub: '— каждый студент с 2007 года' },
-  { emoji: '🙏', text: 'Не сдал зачёт?', sub: 'пересдача — это просто второй шанс. И третий.' },
-  { emoji: '😤', text: '«Это войдёт в экзамен?»', sub: '— самый важный вопрос семестра' },
-  { emoji: '🫠', text: 'Открыл задание', sub: 'закрыл задание' },
-  { emoji: '📖', text: 'Читаю лекцию перед экзаменом', sub: 'в 3 часа ночи' },
-  { emoji: '🎯', text: 'Цель на сессию', sub: 'закрыть всё на тройки и выжить' },
-  { emoji: '⏰', text: 'Поставил будильник на 8:00', sub: 'проснулся в 12:00' },
-  { emoji: '💻', text: 'Лабораторная на завтра', sub: 'открываю StackOverflow' },
-]
+const MEME_SUBREDDITS = ['ProgrammerHumor', 'memes', 'me_irl']
 
-function getMemeOfDay() {
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000)
-  return MEMES[dayOfYear % MEMES.length]
+async function fetchMeme(subreddit: string) {
+  const r = await fetch(`https://meme-api.com/gimme/${subreddit}`)
+  if (!r.ok) throw new Error('meme fetch failed')
+  const data = await r.json()
+  if (data.nsfw || data.spoiler) return fetchMeme(subreddit)
+  return data as { title: string; url: string; subreddit: string; ups: number; postLink: string }
 }
 
 export default function DashboardPage() {
   const { user } = useAuthStore()
-  const meme = getMemeOfDay()
+  const [memeKey, setMemeKey] = useState(0)
+  const [subreddit] = useState(() => MEME_SUBREDDITS[Math.floor(Math.random() * MEME_SUBREDDITS.length)])
+
+  const { data: meme, isFetching: memeFetching } = useQuery({
+    queryKey: ['meme', subreddit, memeKey],
+    queryFn: () => fetchMeme(subreddit),
+    staleTime: Infinity,
+    retry: 2,
+  })
 
   const { data: stats } = useQuery({
     queryKey: ['dashboard'],
@@ -181,14 +181,42 @@ export default function DashboardPage() {
         </div>
 
         {/* Meme of the day */}
-        <div className="md:col-span-2 card border-surface-700/50 flex flex-col justify-between">
-          <div className="text-[10px] font-mono text-surface-200/20 uppercase tracking-widest mb-2">мем дня</div>
-          <div>
-            <div className="text-4xl mb-3 animate-float" style={{ animationDelay: '0.5s' }}>{meme.emoji}</div>
-            <p className="text-sm font-semibold text-white leading-snug">{meme.text}</p>
-            <p className="text-xs text-surface-200/40 mt-1 italic">{meme.sub}</p>
+        <div className="md:col-span-2 card border-surface-700/50 flex flex-col gap-2 overflow-hidden">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] font-mono text-surface-200/20 uppercase tracking-widest">мем дня</div>
+            <button
+              onClick={() => setMemeKey(k => k + 1)}
+              disabled={memeFetching}
+              className="p-1 rounded-lg text-surface-200/30 hover:text-brand-400 hover:bg-brand-600/10 transition-all disabled:opacity-40"
+              title="Другой мем"
+            >
+              <RefreshCw size={12} className={memeFetching ? 'animate-spin' : ''} />
+            </button>
           </div>
-          <div className="mt-3 text-[10px] text-surface-200/15">обновляется каждый день</div>
+          {memeFetching || !meme ? (
+            <div className="flex-1 flex flex-col gap-2">
+              <div className="skeleton h-32 rounded-xl w-full" />
+              <div className="skeleton h-3 rounded w-3/4" />
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col gap-2 min-h-0">
+              <a href={meme.postLink} target="_blank" rel="noopener noreferrer"
+                className="block overflow-hidden rounded-xl border border-surface-800 hover:border-brand-500/30 transition-colors">
+                <img
+                  src={meme.url}
+                  alt={meme.title}
+                  className="w-full object-cover max-h-44"
+                  loading="lazy"
+                />
+              </a>
+              <p className="text-xs text-white/70 leading-snug line-clamp-2">{meme.title}</p>
+              <div className="flex items-center gap-2 text-[10px] text-surface-200/20">
+                <span>r/{meme.subreddit}</span>
+                <span>·</span>
+                <span>▲ {meme.ups.toLocaleString()}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
