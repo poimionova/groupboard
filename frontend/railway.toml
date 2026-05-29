@@ -1,8 +1,7 @@
 [build]
-builder = "NIXPACKS"
-buildCommand = "npm install --legacy-peer-deps && npx vite build"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "sh -c 'serve -s dist -l ${PORT:-3000}'"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
