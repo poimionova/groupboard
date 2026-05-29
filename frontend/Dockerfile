@@ -10,5 +10,5 @@ RUN npx vite build
 FROM caddy:alpine
 COPY --from=builder /app/dist /srv
 COPY Caddyfile /etc/caddy/Caddyfile
-EXPOSE 80
+EXPOSE 3000
 CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
