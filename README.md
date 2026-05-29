@@ -1,5 +1,7 @@
 # 📋 GroupBoard — Kanban для учебной группы
 
+**🌐 Live Demo: https://front-production-be05.up.railway.app**
+
 Веб-приложение для организации учёбы: домашние задания, расписание, очередь выступлений, голосования и канбан-доска.
 
 ## 🚀 Быстрый старт (Docker Compose — 1 команда)
@@ -85,10 +87,18 @@ groupboard/
 - **head** — староста: создание очередей, задач, расписания
 - **member** — студент: просмотр, отметка ДЗ, голосования
 
-## 🌐 Деплой (Render + Vercel)
-1. **Backend → Render.com**: новый Web Service → Docker → указать `DATABASE_URL` из Supabase
-2. **Frontend → Vercel**: импорт репозитория → указать `VITE_API_URL=https://your-backend.render.com`
-3. **БД → Supabase.com**: бесплатный PostgreSQL, скопировать Connection String
+## 🌐 Деплой (Railway)
+
+Проект задеплоен на [Railway](https://railway.app) из монорепозитория:
+
+| Сервис | URL |
+|--------|-----|
+| Frontend | https://front-production-be05.up.railway.app |
+| Backend | Railway (private) |
+| Database | PostgreSQL (Railway plugin) |
+
+Конфигурация деплоя в `backend/railway.toml` и `frontend/railway.toml`.  
+Переменные окружения: `DATABASE_URL`, `SECRET_KEY`, `VITE_API_URL`.
 
 ## 📝 Лицензия
 MIT — учебный проект
